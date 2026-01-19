@@ -2,7 +2,7 @@
 
 A friendly, minimalist AI companion with a nostalgic Apple ][+ monochrome green CRT aesthetic. Powered by Gemini, BOBA is a Gen-X nerd born in 1968 who was transported from 2026 into a vintage 1980s machine.
 
-![Boba Chat Preview](/Users/enanale/.gemini/antigravity/brain/30c12f4a-68f2-45cc-9654-63ce3d75fdfe/final_success_screenshot_1768841014023.png)
+![Boba Chat Preview](./screenshot.png)
 
 ## ✨ Features
 

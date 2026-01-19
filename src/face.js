@@ -3,11 +3,11 @@ export function initFace() {
 
     const themes = {
         classic: {
-            neutral: "[ o _ o ]",
-            happy: "[ ^ _ ^ ]",
-            thinking: "[ . _ . ]",
-            speaking: "[ o 0 o ]",
-            listening: "[ > _ < ]"
+            neutral: "] o _ o [",
+            happy: "] ^ _ ^ [",
+            thinking: "] . _ . [",
+            speaking: "] o 0 o [",
+            listening: "] > _ < ["
         },
         blocky: {
             neutral: "[ ### ### ]",
