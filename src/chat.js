@@ -1,31 +1,39 @@
 export async function initChat() {
     const input = document.getElementById('user-input');
     const container = document.getElementById('chat-container');
+    const micBtn = document.getElementById('mic-btn');
 
+    // Command Dispatcher
+    const handleCommand = (text) => {
+        if (text.startsWith('/style ')) {
+            const style = text.split(' ')[1].toLowerCase();
+            if (window.setFaceStyle(style)) {
+                addMessage('SYSTEM', `FACE MODULE RECONFIGURED TO: ${style.toUpperCase()}`);
+            } else {
+                addMessage('SYSTEM', `ERROR: STYLE '${style.toUpperCase()}' NOT FOUND.`);
+            }
+            return true;
+        }
+        return false;
+    };
+
+    // User Input Handling
     input.addEventListener('keydown', async (e) => {
         if (e.key === 'Enter' && input.value.trim() !== '') {
             const text = input.value.trim();
             input.value = '';
 
-            if (text.startsWith('/style ')) {
-                const style = text.split(' ')[1].toLowerCase();
-                if (window.setFaceStyle(style)) {
-                    addMessage('SYSTEM', `FACE MODULE RECONFIGURED TO: ${style.toUpperCase()}`);
-                } else {
-                    addMessage('SYSTEM', `ERROR: STYLE '${style.toUpperCase()}' NOT FOUND.`);
-                }
-                return;
-            }
+            if (handleCommand(text)) return;
 
             addMessage('USER', text);
             await processResponse(text);
         }
     });
 
-    const micBtn = document.getElementById('mic-btn');
+    // Mic Button Handling (Consolidated)
     if (micBtn) {
         micBtn.addEventListener('click', () => {
-            window.startListening();
+            if (window.startListening) window.startListening();
         });
     }
 
@@ -37,25 +45,23 @@ export async function initChat() {
         container.scrollTop = container.scrollHeight;
     }
 
+    // AI Integration
     const { GoogleGenerativeAI } = await import('@google/generative-ai');
     const { BOBA_PERSONA_PROMPT } = await import('./persona.js');
 
-    const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
-    // Choosing gemini-2.0-flash-lite as the most stable current option for both 404 and 429 avoidance
+    const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+    if (!apiKey || apiKey === 'your_key_here') {
+        addMessage('SYSTEM', "ERROR: VITE_GEMINI_API_KEY NOT FOUND. UPDATE .env FILE.");
+        return;
+    }
+
+    const genAI = new GoogleGenerativeAI(apiKey);
     const model = genAI.getGenerativeModel({
         model: "gemini-2.0-flash-lite",
         systemInstruction: BOBA_PERSONA_PROMPT
     });
 
     async function processResponse(text) {
-        if (!import.meta.env.VITE_GEMINI_API_KEY || import.meta.env.VITE_GEMINI_API_KEY === 'your_key_here') {
-            const errorMsg = "ERROR: GEMINI API KEY NOT FOUND. PLEASE CHECK .env FILE.";
-            addMessage('SYSTEM', errorMsg);
-            window.speak(errorMsg);
-            window.setFace('neutral');
-            return;
-        }
-
         window.setFace('thinking');
 
         try {
@@ -69,18 +75,18 @@ export async function initChat() {
             console.error('Gemini API Error:', error);
 
             let displayError = "ERROR: CONNECTION TO BOBA-CORE INTERRUPTED.";
+            const msg = error.message || "";
 
-            if (error.message && error.message.includes('429')) {
-                displayError = "ERROR: SYSTEM OVERLOAD. RATE LIMIT EXCEEDED. PLEASE WAIT 60 SECS.";
-            } else if (error.message && error.message.includes('404')) {
-                displayError = "ERROR: BOBA-CORE MODEL NOT FOUND. RECONFIGURING SUBNET...";
-            } else if (error.message && error.message.includes('API_KEY_INVALID')) {
+            if (msg.includes('429')) {
+                displayError = "ERROR: SYSTEM OVERLOAD. RATE LIMIT EXCEEDED.";
+            } else if (msg.includes('404')) {
+                displayError = "ERROR: BOBA-CORE MODEL NOT FOUND.";
+            } else if (msg.includes('API_KEY_INVALID')) {
                 displayError = "ERROR: UNAUTHORIZED ACCESS. API KEY REJECTED.";
             }
 
             addMessage('SYSTEM', displayError);
-            window.speak(displayError);
-            window.setFace('neutral');
+            if (window.speak) window.speak(displayError);
         } finally {
             window.setFace('neutral');
         }

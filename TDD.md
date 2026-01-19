@@ -1,29 +1,31 @@
 # Boba Chat - Technical Design Document (TDD)
 
 ## Architecture Overview
-Boba Chat will be built as an ultra-minimalist SPA using Vite and Vanilla JS/CSS. The design will leverage modern CSS for retro effects (scanlines, glows, pixelation).
+Boba Chat is a minimalist Single Page Application (SPA) built with Vite and Vanilla JavaScript. It emphasizes high-fidelity CSS for retro visual effects and utilizes a modular architecture for AI, UI, and Voice components.
 
 ## Tech Stack
 - **Frontend**: Vite + Vanilla JavaScript.
-- **Voice**: Web Speech API.
-- **Styling**: Vanilla CSS with a strict monochrome green palette (#00FF41 on #000). Extensive use of `text-shadow` for phosphor glow and CSS overlays for scanlines and CRT curvature.
-- **Typography**: Monospaced or blocky retro-computing fonts (e.g., VT323, Apple ][ pixel fonts).
+- **AI Integration**: Google Generative AI SDK (`@google/generative-ai`) using `gemini-2.0-flash-lite`.
+- **Voice UI**: Web Speech API (`SpeechRecognition` and `SpeechSynthesis`).
+- **Styling**: Vanilla CSS with custom Green CRT tokens (#00FF41).
 
-## Technical Requirements
-- Node.js environment.
-- Responsive layout (mobile-first).
-- Secure handling of API keys (Environment variables).
+## Key Technical Decisions
+- **Stable AI Routing**: Uses `gemini-2.0-flash-lite` for stability and high quota availability.
+- **Persona Management**: System prompts isolated in `src/persona.js` to separate "brain" from "logic".
+- **Responsive ASCII Scaling**: Uses CSS `clamp()` and `vw` units to ensure the typography-based face never wraps or clips.
+- **Command Dispatcher**: Input parsing for slash commands (e.g., `/style`) for UI customization.
+- **Unified Event Handling**: Consolidated UI events in `chat.js` for better maintainability.
 
-## Key Decisions
-- **Vite/Vanilla**: Minimal overhead, fast development, and total control over the DOM.
-- **Web Speech API**: built-in browser support for voice interaction without extra libraries.
-- **Expressive Typography**: Using variable fonts and CSS animations to create "character".
+## File Structure
+- `src/persona.js`: System instruction branding.
+- `src/face.js`: ASCII theme management and animation triggers.
+- `src/voice.js`: Speech API wrappers.
+- `src/chat.js`: Central logic, API interaction, and command handling.
+- `style.css`: CRT physics and responsive layout rules.
 
-## Data Model
-- `Message`: { role: 'user' | 'assistant', content: string, timestamp: Date }
-- `Persona`: Configurable system prompts.
-
-## Future Enhancements
-- Chat history persistence (Firebase or local storage).
-- Voice interaction.
-- Image generation capability.
+## Final Implementation Status
+- ✅ Voice Interaction (STT/TTS).
+- ✅ Face Style Selector.
+- ✅ Robust 429/404 Error Handling.
+- ✅ Mobile-Responsive CRT Overlay.
+- ✅ Gen-X Persona Tuning.

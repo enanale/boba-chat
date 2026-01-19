@@ -1,11 +1,14 @@
 export function initVoice() {
     console.log("Initializing Web Speech API...");
 
-    // We'll expose simple speak and listen functions
+    // Unified speak and listen functions
     window.speak = (text) => {
+        if (!window.speechSynthesis) return;
+
+        window.speechSynthesis.cancel(); // Stop any current speech
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.rate = 0.9;
-        utterance.pitch = 0.8; // Lower pitch for that "vintage computer" feel
+        utterance.pitch = 0.8;
 
         utterance.onstart = () => window.setFace('speaking');
         utterance.onend = () => window.setFace('neutral');
@@ -28,19 +31,13 @@ export function initVoice() {
         recognition.onresult = (event) => {
             const transcript = event.results[0][0].transcript;
             const inputField = document.getElementById('user-input');
-            inputField.value = transcript;
-            // Trigger chat submit
-            inputField.dispatchEvent(new KeyboardEvent('keydown', { 'key': 'Enter' }));
+            if (inputField) {
+                inputField.value = transcript;
+                inputField.dispatchEvent(new KeyboardEvent('keydown', { 'key': 'Enter' }));
+            }
         };
         recognition.onend = () => window.setFace('neutral');
 
         recognition.start();
     };
-
-    const micBtn = document.getElementById('mic-btn');
-    if (micBtn) {
-        micBtn.addEventListener('click', () => {
-            window.startListening();
-        });
-    }
 }

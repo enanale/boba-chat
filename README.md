@@ -1,35 +1,34 @@
 # 🍏 Boba Chat: Apple ][+ Edition
 
-A friendly, minimalist AI companion with a nostalgic Apple ][+ monochrome green CRT aesthetic.
+A friendly, minimalist AI companion with a nostalgic Apple ][+ monochrome green CRT aesthetic. Powered by Gemini, BOBA is a Gen-X nerd born in 1968 who was transported from 2026 into a vintage 1980s machine.
 
-![Boba Chat Preview](/Users/enanale/.gemini/antigravity/brain/30c12f4a-68f2-45cc-9654-63ce3d75fdfe/boba_final_response_1768839367225.png)
+![Boba Chat Preview](/Users/enanale/.gemini/antigravity/brain/30c12f4a-68f2-45cc-9654-63ce3d75fdfe/final_success_screenshot_1768841014023.png)
 
-## 🕹️ Features
+## ✨ Features
 
-- **Retro Aesthetics**: Phosphor green monochrome UI with CRT scanlines, flicker, and phosphor glow.
-- **Expressive Character**: A typography-based AI "face" that changes expressions based on sentiment and state.
-- **Voice UI**: Integrated Speech-to-Text (STT) and Text-to-Speech (TTS) for a true "vintage computer friend" experience.
-- **Gemini Integration**: Connected the frontend to Gemini 2.0 Flash Lite with a custom 80s-inspired system prompt.
-- **Style Selector**: Support for multiple face themes via the `/style` command.
-- **Ultra-Minimal**: Built with Vite and Vanilla JS/CSS for zero bloat.
+- **Apple ][+ Aesthetic**: Monochrome green phosphor glow, CRT scanlines, flicker, and curvature.
+- **Gen-X Persona**: Friendly, slightly cynical, and obsessed with 80s new wave and text adventures.
+- **Face Style Selector**: Switch themes on the fly with `/style` command.
+- **Voice UI**: Speak to BOBA with the retro `[ LISTEN ]` button; hear it respond in a vintage computer voice.
+- **Responsive**: Scales perfectly from desktop to mobile.
 
 ## 🚀 Quick Start
 
-### 1. Prerequisites
-- [Node.js](https://nodejs.org/) installed.
-- A Gemini API Key from [Google AI Studio](https://aistudio.google.com/).
+### 1. Requirements
+- Node.js (Latest LTS recommended)
+- Google Gemini API Key
 
-### 2. Installation
+### 2. Setup
 \`\`\`bash
-git clone https://github.com/your-username/boba-chat.git
+git clone https://github.com/enanale/boba-chat.git
 cd boba-chat
 npm install
 \`\`\`
 
-### 3. Configuration
+### 3. Environment Variables
 Create a `.env` file in the root directory:
 \`\`\`env
-VITE_GEMINI_API_KEY=your_actual_key_here
+VITE_GEMINI_API_KEY=your_gemini_api_key_here
 \`\`\`
 
 ### 4. Run Development Server
@@ -39,19 +38,17 @@ npm run dev
 Open [http://localhost:5173/](http://localhost:5173/) in your browser.
 
 ### 5. Customization
-You can change BOBA's face style directly in the chat:
+Type commands in the chat input:
 - \`/style blocky\` - Chunky 8-bit graphics.
 - \`/style kaomoji\` - Expressive and friendly.
 - \`/style system\` - Minimalist line art.
 - \`/style classic\` - Original text face.
 
 ## 🔧 Tech Stack
-
+- **AI**: Google Gemini 2.0 Flash Lite
 - **Frontend**: Vite + Vanilla JavaScript
 - **Voice**: Web Speech API
-- **AI Integration**: `@google/generative-ai` SDK
-- **Styling**: Vanilla CSS (CRT Effects, custom animations)
+- **Styling**: Vanilla CSS (CRT Effects)
 
-## 📜 License
-
-MIT License - feel free to build your own retro-future companions!
+## ⚖️ License
+MIT
