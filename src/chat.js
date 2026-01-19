@@ -4,14 +4,19 @@ export async function initChat() {
     const micBtn = document.getElementById('mic-btn');
 
     // Command Dispatcher
-    const handleCommand = (text) => {
+    const handleCommand = async (text) => {
         if (text.startsWith('/style ')) {
             const style = text.split(' ')[1].toLowerCase();
             if (window.setFaceStyle(style)) {
-                addMessage('SYSTEM', `FACE MODULE RECONFIGURED TO: ${style.toUpperCase()}`);
+                await addMessage('SYSTEM', `FACE MODULE RECONFIGURED TO: ${style.toUpperCase()}`, true);
             } else {
-                addMessage('SYSTEM', `ERROR: STYLE '${style.toUpperCase()}' NOT FOUND.`);
+                await addMessage('SYSTEM', `ERROR: STYLE '${style.toUpperCase()}' NOT FOUND.`, true);
             }
+            return true;
+        }
+        if (text.startsWith('/draw ')) {
+            const prompt = text.replace('/draw ', '').trim();
+            await processResponse(`Create a small, simple ASCII art of ${prompt} suitable for a terminal output. Wrap it in triple backticks.`);
             return true;
         }
         return false;
@@ -26,9 +31,9 @@ export async function initChat() {
             const text = input.value.trim();
             input.value = '';
 
-            if (handleCommand(text)) return;
+            if (await handleCommand(text)) return;
 
-            addMessage('USER', text);
+            await addMessage('USER', text);
             await processResponse(text);
         }
     });
@@ -47,7 +52,23 @@ export async function initChat() {
         container.appendChild(msgDiv);
         const contentSpan = msgDiv.querySelector('.content');
 
-        if (typeEffect) {
+        if (text.includes('```')) {
+            const parts = text.split('```');
+            for (let i = 0; i < parts.length; i++) {
+                if (i % 2 === 1) { // Code block
+                    const pre = document.createElement('pre');
+                    pre.className = 'ascii-art';
+                    const code = parts[i].replace(/^[a-z]+\n/i, '');
+                    pre.textContent = code;
+                    contentSpan.appendChild(pre);
+                    if (window.playKeyClick) window.playKeyClick();
+                } else if (parts[i].trim()) {
+                    const span = document.createElement('span');
+                    span.textContent = parts[i];
+                    contentSpan.appendChild(span);
+                }
+            }
+        } else if (typeEffect) {
             const chars = text.split('');
             for (const char of chars) {
                 contentSpan.textContent += char;
@@ -78,15 +99,19 @@ export async function initChat() {
         systemInstruction: BOBA_PERSONA_PROMPT
     });
 
+    const chatSession = model.startChat({
+        history: []
+    });
+
     async function processResponse(text) {
         window.setFace('thinking');
 
         try {
-            const result = await model.generateContent(text);
+            const result = await chatSession.sendMessage(text);
             const response = await result.response;
             const responseText = response.text().toUpperCase();
 
-            addMessage('BOBA', responseText);
+            await addMessage('BOBA', responseText, true);
             window.speak(responseText);
         } catch (error) {
             console.error('Gemini API Error:', error);
@@ -102,7 +127,7 @@ export async function initChat() {
                 displayError = "ERROR: UNAUTHORIZED ACCESS. API KEY REJECTED.";
             }
 
-            addMessage('SYSTEM', displayError);
+            await addMessage('SYSTEM', displayError, true);
             if (window.speak) window.speak(displayError);
         } finally {
             window.setFace('neutral');

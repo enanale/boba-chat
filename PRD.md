@@ -23,5 +23,6 @@ Boba Chat is a friendly AI-powered chatbot with a minimalist, monochrome green C
 
 ## Success Metrics
 - Performance: Snappy UI interactions and low API latency.
-- Visual Fidelity: A convincing "CRT" feel on modern screens.
+- Visual Fidelity: Convincing Apple II+ "CRT" feel using the `VT323` pixel font and custom scanline/flicker effects.
+- Conversational Memory: BOBA remembers previous messages in the session, allowing for natural, multi-turn dialogues.
 - Persona Engagement: BOBA's specific Gen-X character adds value beyond standard AI interactions.
