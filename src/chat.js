@@ -19,6 +19,9 @@ export async function initChat() {
 
     // User Input Handling
     input.addEventListener('keydown', async (e) => {
+        // Play click for any key EXCEPT just the logic keys
+        if (window.playKeyClick) window.playKeyClick();
+
         if (e.key === 'Enter' && input.value.trim() !== '') {
             const text = input.value.trim();
             input.value = '';
@@ -37,11 +40,25 @@ export async function initChat() {
         });
     }
 
-    function addMessage(sender, text) {
+    async function addMessage(sender, text, typeEffect = false) {
         const msgDiv = document.createElement('div');
         msgDiv.className = 'message';
-        msgDiv.innerHTML = `<span class="prefix">${sender}></span> ${text}`;
+        msgDiv.innerHTML = `<span class="prefix">${sender}></span> <span class="content"></span>`;
         container.appendChild(msgDiv);
+        const contentSpan = msgDiv.querySelector('.content');
+
+        if (typeEffect) {
+            const chars = text.split('');
+            for (const char of chars) {
+                contentSpan.textContent += char;
+                if (window.playKeyClick) window.playKeyClick();
+                container.scrollTop = container.scrollHeight;
+                await new Promise(r => setTimeout(r, 20 + Math.random() * 30));
+            }
+        } else {
+            contentSpan.textContent = text;
+        }
+
         container.scrollTop = container.scrollHeight;
     }
 
@@ -51,7 +68,7 @@ export async function initChat() {
 
     const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
     if (!apiKey || apiKey === 'your_key_here') {
-        addMessage('SYSTEM', "ERROR: VITE_GEMINI_API_KEY NOT FOUND. UPDATE .env FILE.");
+        await addMessage('SYSTEM', "ERROR: VITE_GEMINI_API_KEY NOT FOUND. UPDATE .env FILE.", true);
         return;
     }
 
