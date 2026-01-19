@@ -1,0 +1,192 @@
+:root {
+    --crt-green: #00FF41;
+    --crt-bg: #000000;
+    --phosphor-glow: 0 0 10px rgba(0, 255, 65, 0.7);
+    --scanline-color: rgba(18, 16, 16, 0.1);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--crt-bg);
+    color: var(--crt-green);
+    font-family: 'Courier New', Courier, monospace;
+    /* Fallback for now */
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+}
+
+#app {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+}
+
+/* CRT Effects */
+.crt-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(var(--scanline-color) 50%,
+            rgba(0, 0, 0, 0) 50%);
+    background-size: 100% 4px;
+    z-index: 100;
+    pointer-events: none;
+    opacity: 0.15;
+}
+
+.screen {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    border: 4px solid var(--crt-green);
+    box-shadow: var(--phosphor-glow), inset var(--phosphor-glow);
+    padding: 2rem;
+    border-radius: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Flicker animation */
+@keyframes flicker {
+    0% {
+        opacity: 0.97;
+    }
+
+    5% {
+        opacity: 0.95;
+    }
+
+    10% {
+        opacity: 0.9;
+    }
+
+    15% {
+        opacity: 0.98;
+    }
+
+    20% {
+        opacity: 0.96;
+    }
+
+    /* ... more variation ... */
+    100% {
+        opacity: 1;
+    }
+}
+
+.screen::before {
+    content: " ";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 10, 0.06));
+    z-index: 2;
+    background-size: 100% 2px, 3px 100%;
+    pointer-events: none;
+}
+
+/* Face Styling */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        text-shadow: var(--phosphor-glow);
+    }
+
+    50% {
+        transform: scale(1.05);
+        text-shadow: 0 0 20px rgba(0, 255, 65, 1);
+    }
+
+    100% {
+        transform: scale(1);
+        text-shadow: var(--phosphor-glow);
+    }
+}
+
+@keyframes text-blink {
+    0% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+#face-container {
+    height: 40%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 8rem;
+    text-shadow: var(--phosphor-glow);
+    margin-bottom: 2rem;
+    transition: all 0.1s ease;
+}
+
+#chat-container {
+    flex: 1;
+    overflow-y: auto;
+    margin-bottom: 1rem;
+    padding-right: 1rem;
+}
+
+#chat-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+#chat-container::-webkit-scrollbar-thumb {
+    background: var(--crt-green);
+    border-radius: 3px;
+}
+
+.message {
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+    word-break: break-all;
+}
+
+.message .prefix {
+    font-weight: bold;
+    margin-right: 0.5rem;
+}
+
+/* Cursor blink */
+#user-input::after {
+    content: "█";
+    animation: text-blink 1s step-end infinite;
+}
+
+#user-input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: var(--crt-green);
+    font-family: inherit;
+    font-size: 1.5rem;
+    outline: none;
+    text-transform: uppercase;
+    text-shadow: var(--phosphor-glow);
+}
+
+#user-input::placeholder {
+    color: rgba(0, 255, 65, 0.3);
+}
