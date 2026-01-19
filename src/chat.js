@@ -3,47 +3,30 @@ export async function initChat() {
     const container = document.getElementById('chat-container');
     const micBtn = document.getElementById('mic-btn');
 
-    // Command Dispatcher
-    const handleCommand = async (text) => {
-        if (text.startsWith('/style ')) {
-            const style = text.split(' ')[1].toLowerCase();
-            if (window.setFaceStyle(style)) {
-                await addMessage('SYSTEM', `FACE MODULE RECONFIGURED TO: ${style.toUpperCase()}`, true);
-            } else {
-                await addMessage('SYSTEM', `ERROR: STYLE '${style.toUpperCase()}' NOT FOUND.`, true);
-            }
-            return true;
-        }
-        if (text.startsWith('/draw ')) {
-            const prompt = text.replace('/draw ', '').trim();
-            await processResponse(`Create a small, simple ASCII art of ${prompt} suitable for a terminal output. Wrap it in triple backticks.`);
-            return true;
-        }
-        return false;
-    };
+    // AI Integration - Initialized early to prevent race conditions
+    const { GoogleGenerativeAI } = await import('@google/generative-ai');
+    const { BOBA_PERSONA_PROMPT } = await import('./persona.js');
 
-    // User Input Handling
-    input.addEventListener('keydown', async (e) => {
-        // Play click for any key EXCEPT just the logic keys
-        if (window.playKeyClick) window.playKeyClick();
+    const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+    if (!apiKey || apiKey === 'your_key_here') {
+        const msgDiv = document.createElement('div');
+        msgDiv.className = 'message';
+        msgDiv.innerHTML = `<span class="prefix">SYSTEM></span> <span class="content">ERROR: VITE_GEMINI_API_KEY NOT FOUND.</span>`;
+        container.appendChild(msgDiv);
+        return;
+    }
 
-        if (e.key === 'Enter' && input.value.trim() !== '') {
-            const text = input.value.trim();
-            input.value = '';
-
-            if (await handleCommand(text)) return;
-
-            await addMessage('USER', text);
-            await processResponse(text);
-        }
+    const genAI = new GoogleGenerativeAI(apiKey);
+    const model = genAI.getGenerativeModel({
+        model: "gemini-2.0-flash-lite",
+        systemInstruction: BOBA_PERSONA_PROMPT
     });
 
-    // Mic Button Handling (Consolidated)
-    if (micBtn) {
-        micBtn.addEventListener('click', () => {
-            if (window.startListening) window.startListening();
-        });
-    }
+    const chatSession = model.startChat({
+        history: []
+    });
+
+    // --- Helper Functions ---
 
     async function addMessage(sender, text, typeEffect = false) {
         const msgDiv = document.createElement('div');
@@ -83,26 +66,6 @@ export async function initChat() {
         container.scrollTop = container.scrollHeight;
     }
 
-    // AI Integration
-    const { GoogleGenerativeAI } = await import('@google/generative-ai');
-    const { BOBA_PERSONA_PROMPT } = await import('./persona.js');
-
-    const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-    if (!apiKey || apiKey === 'your_key_here') {
-        await addMessage('SYSTEM', "ERROR: VITE_GEMINI_API_KEY NOT FOUND. UPDATE .env FILE.", true);
-        return;
-    }
-
-    const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({
-        model: "gemini-2.0-flash-lite",
-        systemInstruction: BOBA_PERSONA_PROMPT
-    });
-
-    const chatSession = model.startChat({
-        history: []
-    });
-
     async function processResponse(text) {
         window.setFace('thinking');
 
@@ -132,5 +95,48 @@ export async function initChat() {
         } finally {
             window.setFace('neutral');
         }
+    }
+
+    // --- Command Handling ---
+
+    const handleCommand = async (text) => {
+        if (text.startsWith('/style ')) {
+            const style = text.split(' ')[1].toLowerCase();
+            if (window.setFaceStyle(style)) {
+                await addMessage('SYSTEM', `FACE MODULE RECONFIGURED TO: ${style.toUpperCase()}`, true);
+            } else {
+                await addMessage('SYSTEM', `ERROR: STYLE '${style.toUpperCase()}' NOT FOUND.`, true);
+            }
+            return true;
+        }
+        if (text.startsWith('/draw ')) {
+            const prompt = text.replace('/draw ', '').trim();
+            await processResponse(`Create a small, simple ASCII art of ${prompt} suitable for a terminal output. Wrap it in triple backticks.`);
+            return true;
+        }
+        return false;
+    };
+
+    // --- Event Listeners ---
+    // Added AFTER initialization to ensure chatSession is ready
+
+    input.addEventListener('keydown', async (e) => {
+        if (window.playKeyClick) window.playKeyClick();
+
+        if (e.key === 'Enter' && input.value.trim() !== '') {
+            const text = input.value.trim();
+            input.value = '';
+
+            if (await handleCommand(text)) return;
+
+            await addMessage('USER', text);
+            await processResponse(text);
+        }
+    });
+
+    if (micBtn) {
+        micBtn.addEventListener('click', () => {
+            if (window.startListening) window.startListening();
+        });
     }
 }
