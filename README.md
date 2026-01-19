@@ -1,6 +1,6 @@
-# 🍏 Boba Chat: Apple II+ Edition
+# 🍏 Boba Chat: Apple ][+ Edition
 
-A friendly, minimalist AI companion with a nostalgic Apple II+ monochrome green CRT aesthetic.
+A friendly, minimalist AI companion with a nostalgic Apple ][+ monochrome green CRT aesthetic.
 
 ![Boba Chat Preview](/Users/enanale/.gemini/antigravity/brain/30c12f4a-68f2-45cc-9654-63ce3d75fdfe/boba_final_response_1768839367225.png)
 
@@ -9,7 +9,8 @@ A friendly, minimalist AI companion with a nostalgic Apple II+ monochrome green 
 - **Retro Aesthetics**: Phosphor green monochrome UI with CRT scanlines, flicker, and phosphor glow.
 - **Expressive Character**: A typography-based AI "face" that changes expressions based on sentiment and state.
 - **Voice UI**: Integrated Speech-to-Text (STT) and Text-to-Speech (TTS) for a true "vintage computer friend" experience.
-- **Powered by Gemini**: Uses Google's Gemini 2.0 Flash for snappy, intelligent, and friendly responses.
+- **Gemini Integration**: Connected the frontend to Gemini 2.0 Flash Lite with a custom 80s-inspired system prompt.
+- **Style Selector**: Support for multiple face themes via the `/style` command.
 - **Ultra-Minimal**: Built with Vite and Vanilla JS/CSS for zero bloat.
 
 ## 🚀 Quick Start
@@ -36,6 +37,13 @@ VITE_GEMINI_API_KEY=your_actual_key_here
 npm run dev
 \`\`\`
 Open [http://localhost:5173/](http://localhost:5173/) in your browser.
+
+### 5. Customization
+You can change BOBA's face style directly in the chat:
+- \`/style blocky\` - Chunky 8-bit graphics.
+- \`/style kaomoji\` - Expressive and friendly.
+- \`/style system\` - Minimalist line art.
+- \`/style classic\` - Original text face.
 
 ## 🔧 Tech Stack
 

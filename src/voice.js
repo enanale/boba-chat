@@ -36,4 +36,11 @@ export function initVoice() {
 
         recognition.start();
     };
+
+    const micBtn = document.getElementById('mic-btn');
+    if (micBtn) {
+        micBtn.addEventListener('click', () => {
+            window.startListening();
+        });
+    }
 }

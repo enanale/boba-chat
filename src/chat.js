@@ -7,26 +7,44 @@ export async function initChat() {
             const text = input.value.trim();
             input.value = '';
 
+            if (text.startsWith('/style ')) {
+                const style = text.split(' ')[1].toLowerCase();
+                if (window.setFaceStyle(style)) {
+                    addMessage('SYSTEM', `FACE MODULE RECONFIGURED TO: ${style.toUpperCase()}`);
+                } else {
+                    addMessage('SYSTEM', `ERROR: STYLE '${style.toUpperCase()}' NOT FOUND.`);
+                }
+                return;
+            }
+
             addMessage('USER', text);
             await processResponse(text);
         }
     });
 
+    const micBtn = document.getElementById('mic-btn');
+    if (micBtn) {
+        micBtn.addEventListener('click', () => {
+            window.startListening();
+        });
+    }
+
     function addMessage(sender, text) {
         const msgDiv = document.createElement('div');
         msgDiv.className = 'message';
-        // Classic "typing" effect or just immediate? 
-        // For Apple II+ vibe, we'll do line-by-line.
         msgDiv.innerHTML = `<span class="prefix">${sender}></span> ${text}`;
         container.appendChild(msgDiv);
         container.scrollTop = container.scrollHeight;
     }
 
     const { GoogleGenerativeAI } = await import('@google/generative-ai');
+    const { BOBA_PERSONA_PROMPT } = await import('./persona.js');
+
     const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
+    // Choosing gemini-2.0-flash-lite as the most stable current option for both 404 and 429 avoidance
     const model = genAI.getGenerativeModel({
-        model: "gemini-2.0-flash",
-        systemInstruction: "You are BOBA, a friendly AI companion from the 80s living in an Apple II+. You are helpful, kind, and have a slight obsession with boba tea. You speak in ALL CAPS to match your monochrome CRT display. Keep your responses concise and friendly."
+        model: "gemini-2.0-flash-lite",
+        systemInstruction: BOBA_PERSONA_PROMPT
     });
 
     async function processResponse(text) {
@@ -48,8 +66,21 @@ export async function initChat() {
             addMessage('BOBA', responseText);
             window.speak(responseText);
         } catch (error) {
-            console.error(error);
-            addMessage('SYSTEM', "ERROR: CONNECTION TO BOBA-CORE INTERRUPTED.");
+            console.error('Gemini API Error:', error);
+
+            let displayError = "ERROR: CONNECTION TO BOBA-CORE INTERRUPTED.";
+
+            if (error.message && error.message.includes('429')) {
+                displayError = "ERROR: SYSTEM OVERLOAD. RATE LIMIT EXCEEDED. PLEASE WAIT 60 SECS.";
+            } else if (error.message && error.message.includes('404')) {
+                displayError = "ERROR: BOBA-CORE MODEL NOT FOUND. RECONFIGURING SUBNET...";
+            } else if (error.message && error.message.includes('API_KEY_INVALID')) {
+                displayError = "ERROR: UNAUTHORIZED ACCESS. API KEY REJECTED.";
+            }
+
+            addMessage('SYSTEM', displayError);
+            window.speak(displayError);
+            window.setFace('neutral');
         } finally {
             window.setFace('neutral');
         }

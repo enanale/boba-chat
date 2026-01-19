@@ -1,23 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Boba Chat - Apple II+</title>
+    <title>Boba Chat - Apple ][+</title>
     <link rel="stylesheet" href="./style.css">
-  </head>
-  <body>
+</head>
+
+<body>
     <div id="app">
-      <div class="crt-overlay"></div>
-      <div class="screen">
-        <div id="face-container"></div>
-        <div id="chat-container"></div>
-        <div id="input-area">
-          <input type="text" id="user-input" placeholder="TYPE OR SPEAK..." autofocus>
+        <div class="crt-overlay"></div>
+        <div class="screen">
+            <div id="face-container"></div>
+            <div id="chat-container"></div>
+            <div id="input-area">
+                <input type="text" id="user-input" placeholder="TYPE OR SPEAK..." autofocus>
+                <button id="mic-btn" title="SPEAK TO BOBA">[ LISTEN ]</button>
+            </div>
         </div>
-      </div>
     </div>
     <script type="module" src="/main.js"></script>
-  </body>
+</body>
+
 </html>

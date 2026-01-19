@@ -7,7 +7,7 @@ Boba Chat will be built as an ultra-minimalist SPA using Vite and Vanilla JS/CSS
 - **Frontend**: Vite + Vanilla JavaScript.
 - **Voice**: Web Speech API.
 - **Styling**: Vanilla CSS with a strict monochrome green palette (#00FF41 on #000). Extensive use of `text-shadow` for phosphor glow and CSS overlays for scanlines and CRT curvature.
-- **Typography**: Monospaced or blocky retro-computing fonts (e.g., VT323, Apple II pixel fonts).
+- **Typography**: Monospaced or blocky retro-computing fonts (e.g., VT323, Apple ][ pixel fonts).
 
 ## Technical Requirements
 - Node.js environment.
