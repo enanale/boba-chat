@@ -33,3 +33,4 @@ Boba Chat is a minimalist Single Page Application (SPA) built with Vite and Vani
 - ✅ Mechanical Keyboard Audio Synthesis.
 - ✅ Conversational Session Memory.
 - ✅ Mobile-Responsive CRT Overlay.
+- ✅ Gen-X / Tron Persona Integration.

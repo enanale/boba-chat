@@ -1,7 +1,7 @@
 # Boba Chat - Product Requirements Document (PRD)
 
 ## Overview
-Boba Chat is a friendly AI-powered chatbot with a minimalist, monochrome green CRT interface. It captures the nostalgic "Apple ][+" aesthetic—phosphor green text on black, CRT scanlines, and blocky, high-contrast typography. The AI companion, BOBA, is a slightly cynical Gen-X nerd (born in 1968) who was transported from 2026 into an Apple ][+ and enjoys vintage computing, 80s new wave, and 5 1/4" floppy disks.
+Boba Chat is a friendly AI-powered chatbot with a minimalist, monochrome green CRT interface. It captures the nostalgic "Apple ][+" aesthetic—phosphor green text on black, CRT scanlines, and blocky, high-contrast typography. The AI companion, BOBA, is a slightly cynical Gen-X nerd (born in 1968) who was transported from 2026 into an Apple ][+ and enjoys vintage computing, 80s new wave, and 5 1/4" floppy disks. BOBA adopts a "Tron" inspired persona, referring to the user as a "User" and himself as a "Program."
 
 ## Target Audience
 - Tech enthusiasts and retro-computing fans.
@@ -15,7 +15,7 @@ Boba Chat is a friendly AI-powered chatbot with a minimalist, monochrome green C
 - As a user, I want to switch between different retro face styles using simple commands.
 
 ## Key Features
-- **Expressive Gen-X Persona**: A custom-tuned AI personality with a focus on 80s pop culture, vintage gaming (Zork, Ultima), and "new wave" music.
+- **Expressive Gen-X Persona**: A custom-tuned AI personality with a focus on 80s pop culture, vintage gaming (Zork, Ultima), "new wave" music, and Tron-inspired dialogue.
 - **Apple ][+ Aesthetic**: Monochrome green palette (#00FF41), phosphor glow, flicker, and CRT curvature.
 - **Face Style Selector**: A `/style` command to switch between `classic`, `blocky`, `kaomoji`, and `system` themes.
 - **Voice UI**: Speech-to-text triggered by a retro `[ LISTEN ]` button and automatic text-to-speech.
