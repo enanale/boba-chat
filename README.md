@@ -7,9 +7,13 @@ A friendly, minimalist AI companion with a nostalgic Apple ][+ monochrome green 
 ## ✨ Features
 
 - **Apple ][+ Aesthetic**: Monochrome green phosphor glow, CRT scanlines, flicker, and curvature.
-- **Gen-X Persona**: Friendly, slightly cynical, and obsessed with 80s new wave and text adventures.
+- **Gen-X Persona**: Friendly, slightly cynical, and obsessed with 80s new wave, text adventures, and Tron.
+- **Conversational Memory**: BOBA remembers previous context in the current session.
+- **ASCII Art Generator**: Use `/draw` to generate retro-style text graphics.
+- **Mechanical Keyboard Audio**: High-fidelity synthesized "clack" sounds with typing effects.
 - **Face Style Selector**: Switch themes on the fly with `/style` command.
 - **Voice UI**: Speak to BOBA with the retro `[ LISTEN ]` button; hear it respond in a vintage computer voice.
+- **Retro Font**: Uses the `VT323` pixel font for perfect alignment and terminal vibes.
 - **Responsive**: Scales perfectly from desktop to mobile.
 
 ## 🚀 Quick Start
@@ -39,16 +43,18 @@ Open [http://localhost:5173/](http://localhost:5173/) in your browser.
 
 ### 5. Customization
 Type commands in the chat input:
+- \`/draw [prompt]\` - Generate 80s-style ASCII graphics (e.g., \`/draw a robot\`).
 - \`/style blocky\` - Chunky 8-bit graphics.
 - \`/style kaomoji\` - Expressive and friendly.
 - \`/style system\` - Minimalist line art.
 - \`/style classic\` - Original text face.
 
 ## 🔧 Tech Stack
-- **AI**: Google Gemini 2.0 Flash Lite
+- **AI**: Google Gemini 2.0 Flash Lite (with Chat Sessions)
 - **Frontend**: Vite + Vanilla JavaScript
 - **Voice**: Web Speech API
-- **Styling**: Vanilla CSS (CRT Effects)
+- **Audio**: Web Audio API (Keyboard Synthesis)
+- **Styling**: Vanilla CSS (CRT Effects + VT323 Font)
 
 ## ⚖️ License
 MIT
